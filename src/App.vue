@@ -1,15 +1,8 @@
 <template>
   <div id="app">
-    <button @click="generateCharacter">{{ $t('generateCharacter') }}</button>
-    <div v-if="character">
-      <h2>{{ $t('characterInfo') }}</h2>
-      <p>{{ $t('name') }}: {{ character.name }}</p>
-      <p>{{ $t('gender') }}: {{ character.gender }}</p>
-      <p>{{ $t('age') }}: {{ character.age }}</p>
-      <p>{{ $t('strength') }}: {{ character.strength }}</p>
-      <p>{{ $t('agility') }}: {{ character.agility }}</p>
-      <p>{{ $t('charisma') }}: {{ character.charisma }}</p>
-      <p>{{ $t('intelligence') }}: {{ character.intelligence }}</p>
+    <div class="layout">
+      <CharacterPanel v-if="player" :character="player" />
+      <Tabs :team="team" />
     </div>
     <h2>{{ $t('currentTime') }}</h2>
     <p>{{ formattedTime }}</p>
@@ -24,6 +17,8 @@
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
+import CharacterPanel from './components/CharacterPanel.vue';
+import Tabs from './components/Tabs.vue';
 
 interface Character {
   name: string;
@@ -36,18 +31,25 @@ interface Character {
 }
 
 export default defineComponent({
+  name: 'App',
+  components: {
+    CharacterPanel,
+    Tabs
+  },
   setup() {
     const { t, locale } = useI18n();
 
-    const character = ref<Character | null>(null);
+    const player = ref<Character | null>(null);
+    const team = ref<Character[]>([]);
+
     const names = ['Alice', 'Bob', 'Charlie', 'Diana', 'Edward'];
     const genders = [t('male'), t('female')];
 
     const getRandomElement = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
     const getRandomValue = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-    const generateCharacter = () => {
-      character.value = {
+    const generateCharacter = (): Character => {
+      return {
         name: getRandomElement(names),
         gender: getRandomElement(genders),
         age: getRandomValue(18, 60),
@@ -56,6 +58,14 @@ export default defineComponent({
         charisma: getRandomValue(1, 10),
         intelligence: getRandomValue(1, 10),
       };
+    };
+
+    const initializeGame = () => {
+      player.value = generateCharacter();
+      team.value = [player.value];
+      for (let i = 0; i < 3; i++) {
+        team.value.push(generateCharacter());
+      }
     };
 
     const currentTime = ref(new Date());
@@ -85,6 +95,7 @@ export default defineComponent({
     });
 
     onMounted(() => {
+      initializeGame();
       timer = window.setInterval(updateTime, 200) as unknown as number;
       isRunning.value = true;
     });
@@ -97,8 +108,22 @@ export default defineComponent({
       locale.value = lang;
     };
 
-    return { character, generateCharacter, formattedTime, toggleTimer, isRunning, changeLanguage, t };
+    return { player, team, formattedTime, toggleTimer, isRunning, changeLanguage, t };
   }
 });
 </script>
 
+<style scoped>
+.layout {
+  display: flex;
+}
+
+.character-panel {
+  width: 20%;
+}
+
+.tabs {
+  width: 80%;
+  margin-left: 1rem;
+}
+</style>
