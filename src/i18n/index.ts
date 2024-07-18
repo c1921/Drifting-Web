@@ -15,7 +15,11 @@ const messages = {
     travel: 'Travel',
     team: 'Team',
     travelContent: 'Travel content goes here...',
-    teamContent: 'Team content goes here...'
+    teamContent: 'Team content goes here...',
+    switchToDarkMode: 'Switch to Dark Mode',
+    switchToLightMode: 'Switch to Light Mode',
+    male: 'Male',
+    female: 'Female'
   },
   zh: {
     name: '名字',
@@ -31,7 +35,11 @@ const messages = {
     travel: '旅行',
     team: '团队',
     travelContent: '旅行内容在此...',
-    teamContent: '团队内容在此...'
+    teamContent: '团队内容在此...',
+    switchToDarkMode: '切换到暗色模式',
+    switchToLightMode: '切换到亮色模式',
+    male: '男',
+    female: '女'
   }
 };
 

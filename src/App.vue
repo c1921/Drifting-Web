@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <div class="layout">
-      <CharacterPanel v-if="player" :character="player" />
-      <Tabs :team="team" />
+      <CharacterPanel v-if="selectedCharacter" :character="selectedCharacter" :isPlayer="isPlayer(selectedCharacter)" />
+      <Tabs :team="team" :player="player!" @memberSelected="selectCharacter" />
     </div>
     <h2>{{ $t('currentTime') }}</h2>
     <p>{{ formattedTime }}</p>
@@ -11,7 +11,7 @@
       <button @click="changeLanguage('en')">English</button>
       <button @click="changeLanguage('zh')">中文</button>
     </div>
-    <button @click="toggleTheme">{{ currentTheme === 'light' ? '切换到暗色模式' : '切换到亮色模式' }}</button>
+    <button @click="toggleTheme">{{ currentTheme === 'light' ? $t('switchToDarkMode') : $t('switchToLightMode') }}</button>
   </div>
 </template>
 
@@ -42,6 +42,7 @@ export default defineComponent({
 
     const player = ref<Character | null>(null);
     const team = ref<Character[]>([]);
+    const selectedCharacter = ref<Character | null>(null);
 
     const names = ['Alice', 'Bob', 'Charlie', 'Diana', 'Edward'];
     const genders = [t('male'), t('female')];
@@ -67,6 +68,15 @@ export default defineComponent({
       for (let i = 0; i < 3; i++) {
         team.value.push(generateCharacter());
       }
+      selectedCharacter.value = player.value;
+    };
+
+    const selectCharacter = (character: Character) => {
+      selectedCharacter.value = character;
+    };
+
+    const isPlayer = (character: Character) => {
+      return character.name === player.value?.name;
     };
 
     const currentTime = ref(new Date());
@@ -128,7 +138,7 @@ export default defineComponent({
       locale.value = lang;
     };
 
-    return { player, team, formattedTime, toggleTimer, isRunning, changeLanguage, t, toggleTheme, currentTheme };
+    return { player, team, selectedCharacter, formattedTime, toggleTimer, isRunning, changeLanguage, t, toggleTheme, currentTheme, selectCharacter, isPlayer };
   }
 });
 </script>
@@ -145,5 +155,9 @@ export default defineComponent({
 .tabs {
   width: 80%;
   margin-left: 1rem;
+}
+
+* {
+  user-select: none; /* 禁止选择文本 */
 }
 </style>

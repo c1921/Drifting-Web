@@ -16,8 +16,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="member in team" :key="member.name">
-              <td>{{ member.name }}</td>
+            <tr v-for="member in team" :key="member.name" @click="selectMember(member)" :class="{ player: isPlayer(member) }">
+              <td>{{ member.name }} <span v-if="isPlayer(member)">★</span></td>
               <td>{{ member.gender }}</td>
               <td>{{ member.age }}</td>
             </tr>
@@ -43,16 +43,29 @@ export default defineComponent({
     team: {
       type: Array as PropType<Character[]>,
       required: true
+    },
+    player: {
+      type: Object as PropType<Character>,
+      required: true
     }
   },
-  setup() {
+  emits: ['memberSelected'],
+  setup(props, { emit }) {
     const selectedTab = ref('travel');
 
     const selectTab = (tab: string) => {
       selectedTab.value = tab;
     };
 
-    return { selectedTab, selectTab };
+    const selectMember = (member: Character) => {
+      emit('memberSelected', member);
+    };
+
+    const isPlayer = (member: Character) => {
+      return member.name === props.player.name;
+    };
+
+    return { selectedTab, selectTab, selectMember, isPlayer };
   }
 });
 </script>
@@ -99,5 +112,17 @@ th, td {
 
 th {
   background-color: #f4f4f4;
+}
+
+tr {
+  cursor: pointer; /* 鼠标悬停时显示指针 */
+}
+
+tr.player {
+  font-weight: bold; /* 玩家角色加粗显示 */
+}
+
+* {
+  user-select: none; /* 禁止选择文本 */
 }
 </style>

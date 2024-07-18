@@ -1,6 +1,6 @@
 <template>
   <div class="character-panel">
-    <p>{{ $t('name') }}: {{ character.name }}</p>
+    <p>{{ $t('name') }}: {{ character.name }} <span v-if="isPlayer">★</span></p>
     <p>{{ $t('gender') }}: {{ character.gender }}</p>
     <p>{{ $t('age') }}: {{ character.age }}</p>
     <p>{{ $t('strength') }}: {{ character.strength }}</p>
@@ -29,6 +29,10 @@ export default defineComponent({
     character: {
       type: Object as PropType<Character>,
       required: true
+    },
+    isPlayer: {
+      type: Boolean,
+      required: true
     }
   }
 });
@@ -39,5 +43,6 @@ export default defineComponent({
   padding: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+  user-select: none; /* 禁止选择文本 */
 }
 </style>
