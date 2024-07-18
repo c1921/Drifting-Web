@@ -1,25 +1,29 @@
 <template>
   <div id="app">
-    <h1>随机角色生成器</h1>
-    <button @click="generateCharacter">生成角色</button>
+    <button @click="generateCharacter">{{ $t('generateCharacter') }}</button>
     <div v-if="character">
-      <h2>角色信息</h2>
-      <p>名字: {{ character.name }}</p>
-      <p>性别: {{ character.gender }}</p>
-      <p>年龄: {{ character.age }}</p>
-      <p>力量: {{ character.strength }}</p>
-      <p>敏捷: {{ character.agility }}</p>
-      <p>魅力: {{ character.charisma }}</p>
-      <p>智力: {{ character.intelligence }}</p>
+      <h2>{{ $t('characterInfo') }}</h2>
+      <p>{{ $t('name') }}: {{ character.name }}</p>
+      <p>{{ $t('gender') }}: {{ character.gender }}</p>
+      <p>{{ $t('age') }}: {{ character.age }}</p>
+      <p>{{ $t('strength') }}: {{ character.strength }}</p>
+      <p>{{ $t('agility') }}: {{ character.agility }}</p>
+      <p>{{ $t('charisma') }}: {{ character.charisma }}</p>
+      <p>{{ $t('intelligence') }}: {{ character.intelligence }}</p>
     </div>
-    <h2>当前时间</h2>
+    <h2>{{ $t('currentTime') }}</h2>
     <p>{{ formattedTime }}</p>
-    <button @click="toggleTimer">{{ isRunning ? '暂停' : '继续' }}</button>
+    <button @click="toggleTimer">{{ isRunning ? $t('pause') : $t('resume') }}</button>
+    <div>
+      <button @click="changeLanguage('en')">English</button>
+      <button @click="changeLanguage('zh')">中文</button>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted, onUnmounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 interface Character {
   name: string;
@@ -33,9 +37,11 @@ interface Character {
 
 export default defineComponent({
   setup() {
+    const { t, locale } = useI18n();
+
     const character = ref<Character | null>(null);
     const names = ['Alice', 'Bob', 'Charlie', 'Diana', 'Edward'];
-    const genders = ['男', '女'];
+    const genders = [t('male'), t('female')];
 
     const getRandomElement = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
     const getRandomValue = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -87,13 +93,12 @@ export default defineComponent({
       clearInterval(timer);
     });
 
-    return { character, generateCharacter, formattedTime, toggleTimer, isRunning };
+    const changeLanguage = (lang: string) => {
+      locale.value = lang;
+    };
+
+    return { character, generateCharacter, formattedTime, toggleTimer, isRunning, changeLanguage, t };
   }
 });
 </script>
 
-<style scoped>
-h1 {
-  color: #42b983;
-}
-</style>
