@@ -2,7 +2,7 @@
   <div id="app">
     <div class="layout">
       <CharacterPanel v-if="selectedCharacter" :character="selectedCharacter" :isPlayer="isPlayer(selectedCharacter)" />
-      <Tabs :team="team" :teamSpeed="teamSpeed" :player="player!" @memberSelected="selectCharacter" />
+      <Tabs :team="team" :teamSpeed="teamSpeed" :player="player!" :items="items" @memberSelected="selectCharacter" />
     </div>
     <p>{{ $t('currentTime') }}: {{ formattedTime }}</p>
     <p>{{ $t('travelDistance') }}: {{ travelDistance }} {{ $t('distanceUnit') }}</p>
@@ -20,7 +20,8 @@ import { defineComponent, ref, computed, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import CharacterPanel from './components/CharacterPanel.vue';
 import Tabs from './components/Tabs.vue';
-import { Character } from './types/character'; // 导入 Character 接口
+import { Character } from './types/character';
+import { Item, Food, Weapon, Shield } from './types/item';
 
 export default defineComponent({
   name: 'App',
@@ -35,6 +36,7 @@ export default defineComponent({
     const team = ref<Character[]>([]);
     const selectedCharacter = ref<Character | null>(null);
     const travelDistance = ref(0);
+    const items = ref<Item[]>([]);
 
     const names = ['Alice', 'Bob', 'Charlie', 'Diana', 'Edward'];
     const genders = [t('male'), t('female')];
@@ -57,6 +59,36 @@ export default defineComponent({
       };
     };
 
+    const generateFood = (): Food => {
+      return {
+        name: getRandomElement(['Apple', 'Blueberry']),
+        weight: getRandomValue(1, 2),
+        value: getRandomValue(5, 10),
+        quantity: getRandomValue(1, 10),
+        expirationDate: new Date(Date.now() + getRandomValue(1, 10) * 86400000) // 随机生成一个有效期
+      };
+    };
+
+    const generateWeapon = (): Weapon => {
+      return {
+        name: getRandomElement(['Sword', 'Hammer']),
+        weight: getRandomValue(5, 15),
+        value: getRandomValue(50, 200),
+        quantity: getRandomValue(1, 5),
+        attackPower: getRandomValue(10, 50)
+      };
+    };
+
+    const generateShield = (): Shield => {
+      return {
+        name: 'Wooden Shield',
+        weight: getRandomValue(5, 10),
+        value: getRandomValue(20, 50),
+        quantity: getRandomValue(1, 5),
+        defense: getRandomValue(5, 15)
+      };
+    };
+
     const initializeGame = () => {
       player.value = generateCharacter();
       team.value = [player.value];
@@ -64,6 +96,7 @@ export default defineComponent({
         team.value.push(generateCharacter());
       }
       selectedCharacter.value = player.value;
+      items.value = [generateFood(), generateWeapon(), generateShield()];
     };
 
     const selectCharacter = (character: Character) => {
@@ -138,7 +171,7 @@ export default defineComponent({
       locale.value = lang;
     };
 
-    return { player, team, selectedCharacter, formattedTime, toggleTimer, isRunning, changeLanguage, t, toggleTheme, currentTheme, selectCharacter, isPlayer, travelDistance, teamSpeed };
+    return { player, team, selectedCharacter, formattedTime, toggleTimer, isRunning, changeLanguage, t, toggleTheme, currentTheme, selectCharacter, isPlayer, travelDistance, teamSpeed, items };
   }
 });
 </script>

@@ -3,6 +3,7 @@
     <div class="tab-buttons">
       <button @click="selectTab('travel')" :class="{ active: selectedTab === 'travel' }">{{ $t('travel') }}</button>
       <button @click="selectTab('team')" :class="{ active: selectedTab === 'team' }">{{ $t('team') }}</button>
+      <button @click="selectTab('items')" :class="{ active: selectedTab === 'items' }">{{ $t('items') }}</button>
     </div>
     <div class="tab-content">
       <div v-if="selectedTab === 'travel'">{{ $t('travelContent') }}</div>
@@ -25,6 +26,26 @@
           </tbody>
         </table>
       </div>
+      <div v-if="selectedTab === 'items'">
+        <table>
+          <thead>
+            <tr>
+              <th>{{ $t('name') }}</th>
+              <th>{{ $t('quantity') }}</th>
+              <th>{{ $t('totalWeight') }}</th>
+              <th>{{ $t('totalValue') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in items" :key="item.name">
+              <td>{{ item.name }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.weight * item.quantity }}</td>
+              <td>{{ item.value * item.quantity }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -32,6 +53,7 @@
 <script lang="ts">
 import { defineComponent, PropType, ref } from 'vue';
 import { Character } from '../types/character'; // 导入 Character 接口
+import { Item } from '../types/item'; // 导入 Item 接口
 
 export default defineComponent({
   name: 'Tabs',
@@ -46,6 +68,10 @@ export default defineComponent({
     },
     teamSpeed: {
       type: Number,
+      required: true
+    },
+    items: {
+      type: Array as PropType<Item[]>,
       required: true
     }
   },

@@ -27,7 +27,16 @@ const messages = {
     no: 'No',
     travelDistance: 'Travel Distance',
     distanceUnit: 'm',
-    teamSpeed: 'Team Speed'
+    teamSpeed: 'Team Speed',
+    items: 'Items',
+    weight: 'Weight',
+    value: 'Value',
+    quantity: 'Quantity',
+    totalWeight: 'Total Weight',
+    totalValue: 'Total Value',
+    expirationDate: 'Expiration Date',
+    attackPower: 'Attack Power',
+    defense: 'Defense'
   },
   zh: {
     generateCharacter: '生成角色',
@@ -55,7 +64,16 @@ const messages = {
     no: '否',
     travelDistance: '旅行距离',
     distanceUnit: '米',
-    teamSpeed: '团队速度'
+    teamSpeed: '团队速度',
+    items: '物品',
+    weight: '重量',
+    value: '价值',
+    quantity: '数量',
+    totalWeight: '总重量',
+    totalValue: '总价值',
+    expirationDate: '有效期',
+    attackPower: '攻击力',
+    defense: '防御'
   }
 };
 
