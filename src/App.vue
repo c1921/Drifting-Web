@@ -21,7 +21,8 @@ import { useI18n } from 'vue-i18n';
 import CharacterPanel from './components/CharacterPanel.vue';
 import Tabs from './components/Tabs.vue';
 import { Character } from './types/character';
-import { Item, Food, Weapon, Shield } from './types/item';
+import { Item } from './types/item';
+import { itemFactory } from './factory/itemFactory';
 
 export default defineComponent({
   name: 'App',
@@ -59,38 +60,6 @@ export default defineComponent({
       };
     };
 
-    const generateFood = (): Food => {
-      return {
-        name: getRandomElement(['Apple', 'Blueberry']),
-        weight: getRandomValue(1, 2),
-        value: getRandomValue(5, 10),
-        quantity: getRandomValue(1, 10),
-        nutrition: getRandomValue(1, 10),
-        hydration: getRandomValue(1, 10),
-        taste: getRandomValue(1, 10)
-      };
-    };
-
-    const generateWeapon = (): Weapon => {
-      return {
-        name: getRandomElement(['Sword', 'Hammer']),
-        weight: getRandomValue(5, 15),
-        value: getRandomValue(50, 200),
-        quantity: getRandomValue(1, 5),
-        attackPower: getRandomValue(10, 50)
-      };
-    };
-
-    const generateShield = (): Shield => {
-      return {
-        name: 'Wooden Shield',
-        weight: getRandomValue(5, 10),
-        value: getRandomValue(20, 50),
-        quantity: getRandomValue(1, 5),
-        defense: getRandomValue(5, 15)
-      };
-    };
-
     const initializeGame = () => {
       player.value = generateCharacter();
       team.value = [player.value];
@@ -98,7 +67,12 @@ export default defineComponent({
         team.value.push(generateCharacter());
       }
       selectedCharacter.value = player.value;
-      items.value = [generateFood(), generateWeapon(), generateShield()];
+
+      items.value = [
+        itemFactory('food', getRandomValue(1, 10)),
+        itemFactory('weapon', getRandomValue(1, 5)),
+        itemFactory('shield', getRandomValue(1, 5))
+      ];
     };
 
     const selectCharacter = (character: Character) => {

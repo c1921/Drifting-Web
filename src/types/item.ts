@@ -22,3 +22,6 @@ export interface Weapon extends Item {
 export interface Shield extends Item {
   defense: number;
 }
+
+// 物品类型
+export type ItemType = 'food' | 'weapon' | 'shield';
