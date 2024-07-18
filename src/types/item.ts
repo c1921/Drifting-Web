@@ -3,12 +3,14 @@ export interface Item {
   name: string;
   weight: number;
   value: number;
-  quantity: number; // 新增数量属性
+  quantity: number;
 }
 
 // 食物接口，继承自 Item
 export interface Food extends Item {
-  expirationDate: Date;
+  nutrition: number;
+  hydration: number;
+  taste: number;
 }
 
 // 武器接口，继承自 Item

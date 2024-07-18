@@ -65,7 +65,9 @@ export default defineComponent({
         weight: getRandomValue(1, 2),
         value: getRandomValue(5, 10),
         quantity: getRandomValue(1, 10),
-        expirationDate: new Date(Date.now() + getRandomValue(1, 10) * 86400000) // 随机生成一个有效期
+        nutrition: getRandomValue(1, 10),
+        hydration: getRandomValue(1, 10),
+        taste: getRandomValue(1, 10)
       };
     };
 

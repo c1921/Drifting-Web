@@ -37,7 +37,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in items" :key="item.name">
+            <tr v-for="item in items" :key="item.name" class="tooltip-container" @mousemove="showTooltip($event, item)" @mouseleave="hideTooltip">
               <td>{{ item.name }}</td>
               <td>{{ item.quantity }}</td>
               <td>{{ item.weight * item.quantity }}</td>
@@ -45,6 +45,7 @@
             </tr>
           </tbody>
         </table>
+        <div class="tooltip" ref="tooltip" v-html="tooltipContent"></div>
       </div>
     </div>
   </div>
@@ -52,8 +53,8 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref } from 'vue';
-import { Character } from '../types/character'; // 导入 Character 接口
-import { Item } from '../types/item'; // 导入 Item 接口
+import { Character } from '../types/character';
+import { Item, Food, Weapon, Shield } from '../types/item';
 
 export default defineComponent({
   name: 'Tabs',
@@ -78,6 +79,8 @@ export default defineComponent({
   emits: ['memberSelected'],
   setup(props, { emit }) {
     const selectedTab = ref('travel');
+    const tooltipContent = ref('');
+    const tooltip = ref<HTMLElement | null>(null);
 
     const selectTab = (tab: string) => {
       selectedTab.value = tab;
@@ -91,7 +94,34 @@ export default defineComponent({
       return member.name === props.player.name;
     };
 
-    return { selectedTab, selectTab, selectMember, isPlayer };
+    const showTooltip = (event: MouseEvent, item: Item) => {
+      if (!tooltip.value) return;
+
+      tooltipContent.value = `Name: ${item.name}<br>Weight: ${item.weight}<br>Value: ${item.value}`;
+      if ('nutrition' in item) {
+        tooltipContent.value += `<br>Nutrition: ${(item as Food).nutrition}`;
+        tooltipContent.value += `<br>Hydration: ${(item as Food).hydration}`;
+        tooltipContent.value += `<br>Taste: ${(item as Food).taste}`;
+      }
+      if ('attackPower' in item) {
+        tooltipContent.value += `<br>Attack Power: ${(item as Weapon).attackPower}`;
+      }
+      if ('defense' in item) {
+        tooltipContent.value += `<br>Defense: ${(item as Shield).defense}`;
+      }
+
+      tooltip.value.style.display = 'block';
+      tooltip.value.style.left = `${event.pageX + 10}px`;
+      tooltip.value.style.top = `${event.pageY + 10}px`;
+    };
+
+    const hideTooltip = () => {
+      if (tooltip.value) {
+        tooltip.value.style.display = 'none';
+      }
+    };
+
+    return { selectedTab, selectTab, selectMember, isPlayer, showTooltip, hideTooltip, tooltipContent, tooltip };
   }
 });
 </script>
@@ -148,6 +178,22 @@ tr {
 
 tr.player {
   font-weight: bold; /* 玩家角色加粗显示 */
+}
+
+.tooltip-container {
+  position: relative;
+}
+
+.tooltip {
+  display: none;
+  position: absolute;
+  background-color: black;
+  color: #fff;
+  text-align: left; /* 左对齐文本 */
+  border-radius: 5px;
+  padding: 5px;
+  z-index: 1000;
+  white-space: nowrap;
 }
 
 * {
