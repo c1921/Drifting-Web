@@ -1,6 +1,5 @@
 <template>
   <div class="character-panel">
-    <h2>{{ $t('characterInfo') }}</h2>
     <p>{{ $t('name') }}: {{ character.name }} <span v-if="isPlayer">★</span></p>
     <p>{{ $t('gender') }}: {{ character.gender }}</p>
     <p>{{ $t('age') }}: {{ character.age }}</p>
@@ -16,19 +15,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-
-interface Character {
-  name: string;
-  gender: string;
-  age: number;
-  strength: number;
-  agility: number;
-  charisma: number;
-  intelligence: number;
-  walkingSpeed: number;
-  ridingSpeed: number;
-  isRiding: boolean;
-}
+import { Character } from '../types/character'; // 导入 Character 接口
 
 export default defineComponent({
   name: 'CharacterPanel',

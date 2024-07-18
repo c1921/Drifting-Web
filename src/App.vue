@@ -20,19 +20,7 @@ import { defineComponent, ref, computed, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import CharacterPanel from './components/CharacterPanel.vue';
 import Tabs from './components/Tabs.vue';
-
-interface Character {
-  name: string;
-  gender: string;
-  age: number;
-  strength: number;
-  agility: number;
-  charisma: number;
-  intelligence: number;
-  walkingSpeed: number;
-  ridingSpeed: number;
-  isRiding: boolean;
-}
+import { Character } from './types/character'; // 导入 Character 接口
 
 export default defineComponent({
   name: 'App',

@@ -31,12 +31,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref } from 'vue';
-
-interface Character {
-  name: string;
-  gender: string;
-  age: number;
-}
+import { Character } from '../types/character'; // 导入 Character 接口
 
 export default defineComponent({
   name: 'Tabs',
