@@ -2,10 +2,10 @@
   <div id="app">
     <div class="layout">
       <CharacterPanel v-if="selectedCharacter" :character="selectedCharacter" :isPlayer="isPlayer(selectedCharacter)" />
-      <Tabs :team="team" :player="player!" @memberSelected="selectCharacter" />
+      <Tabs :team="team" :teamSpeed="teamSpeed" :player="player!" @memberSelected="selectCharacter" />
     </div>
-    <h2>{{ $t('currentTime') }}</h2>
-    <p>{{ formattedTime }}</p>
+    <p>{{ $t('currentTime') }}: {{ formattedTime }}</p>
+    <p>{{ $t('travelDistance') }}: {{ travelDistance }} {{ $t('distanceUnit') }}</p>
     <button @click="toggleTimer">{{ isRunning ? $t('pause') : $t('resume') }}</button>
     <div>
       <button @click="changeLanguage('en')">English</button>
@@ -29,6 +29,9 @@ interface Character {
   agility: number;
   charisma: number;
   intelligence: number;
+  walkingSpeed: number;
+  ridingSpeed: number;
+  isRiding: boolean;
 }
 
 export default defineComponent({
@@ -43,6 +46,7 @@ export default defineComponent({
     const player = ref<Character | null>(null);
     const team = ref<Character[]>([]);
     const selectedCharacter = ref<Character | null>(null);
+    const travelDistance = ref(0);
 
     const names = ['Alice', 'Bob', 'Charlie', 'Diana', 'Edward'];
     const genders = [t('male'), t('female')];
@@ -59,6 +63,9 @@ export default defineComponent({
         agility: getRandomValue(1, 10),
         charisma: getRandomValue(1, 10),
         intelligence: getRandomValue(1, 10),
+        walkingSpeed: 70,
+        ridingSpeed: getRandomValue(100, 150),
+        isRiding: false
       };
     };
 
@@ -79,12 +86,17 @@ export default defineComponent({
       return character.name === player.value?.name;
     };
 
+    const teamSpeed = computed(() => {
+      return Math.min(...team.value.map(character => character.isRiding ? character.ridingSpeed : character.walkingSpeed));
+    });
+
     const currentTime = ref(new Date());
     const isRunning = ref(false);
     let timer: number | undefined;
 
     const updateTime = () => {
       currentTime.value = new Date(currentTime.value.getTime() + 60000); // 每分钟增加60,000毫秒
+      travelDistance.value += teamSpeed.value;
     };
 
     const toggleTimer = () => {
@@ -138,7 +150,7 @@ export default defineComponent({
       locale.value = lang;
     };
 
-    return { player, team, selectedCharacter, formattedTime, toggleTimer, isRunning, changeLanguage, t, toggleTheme, currentTheme, selectCharacter, isPlayer };
+    return { player, team, selectedCharacter, formattedTime, toggleTimer, isRunning, changeLanguage, t, toggleTheme, currentTheme, selectCharacter, isPlayer, travelDistance, teamSpeed };
   }
 });
 </script>

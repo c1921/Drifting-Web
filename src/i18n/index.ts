@@ -2,6 +2,8 @@ import { createI18n } from 'vue-i18n';
 
 const messages = {
   en: {
+    generateCharacter: 'Generate Character',
+    characterInfo: 'Character Information',
     name: 'Name',
     gender: 'Gender',
     age: 'Age',
@@ -18,10 +20,18 @@ const messages = {
     teamContent: 'Team content goes here...',
     switchToDarkMode: 'Switch to Dark Mode',
     switchToLightMode: 'Switch to Light Mode',
-    male: 'Male',
-    female: 'Female'
+    walkingSpeed: 'Walking Speed',
+    ridingSpeed: 'Riding Speed',
+    isRiding: 'Is Riding',
+    yes: 'Yes',
+    no: 'No',
+    travelDistance: 'Travel Distance',
+    distanceUnit: 'm',
+    teamSpeed: 'Team Speed'
   },
   zh: {
+    generateCharacter: '生成角色',
+    characterInfo: '角色信息',
     name: '名字',
     gender: '性别',
     age: '年龄',
@@ -38,8 +48,14 @@ const messages = {
     teamContent: '团队内容在此...',
     switchToDarkMode: '切换到暗色模式',
     switchToLightMode: '切换到亮色模式',
-    male: '男',
-    female: '女'
+    walkingSpeed: '步行速度',
+    ridingSpeed: '骑马速度',
+    isRiding: '是否骑行',
+    yes: '是',
+    no: '否',
+    travelDistance: '旅行距离',
+    distanceUnit: '米',
+    teamSpeed: '团队速度'
   }
 };
 

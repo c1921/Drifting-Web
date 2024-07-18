@@ -7,6 +7,7 @@
     <div class="tab-content">
       <div v-if="selectedTab === 'travel'">{{ $t('travelContent') }}</div>
       <div v-if="selectedTab === 'team'">
+        <p>{{ $t('teamSpeed') }}: {{ teamSpeed }} {{ $t('distanceUnit') }}/min</p>
         <table>
           <thead>
             <tr>
@@ -46,6 +47,10 @@ export default defineComponent({
     },
     player: {
       type: Object as PropType<Character>,
+      required: true
+    },
+    teamSpeed: {
+      type: Number,
       required: true
     }
   },
