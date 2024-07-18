@@ -2,8 +2,6 @@ import { createI18n } from 'vue-i18n';
 
 const messages = {
   en: {
-    generateCharacter: 'Generate Character',
-    characterInfo: 'Character Information',
     name: 'Name',
     gender: 'Gender',
     age: 'Age',
@@ -20,8 +18,6 @@ const messages = {
     teamContent: 'Team content goes here...'
   },
   zh: {
-    generateCharacter: '生成角色',
-    characterInfo: '角色信息',
     name: '名字',
     gender: '性别',
     age: '年龄',

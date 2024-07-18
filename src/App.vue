@@ -11,6 +11,7 @@
       <button @click="changeLanguage('en')">English</button>
       <button @click="changeLanguage('zh')">中文</button>
     </div>
+    <button @click="toggleTheme">{{ currentTheme === 'light' ? '切换到暗色模式' : '切换到亮色模式' }}</button>
   </div>
 </template>
 
@@ -94,10 +95,29 @@ export default defineComponent({
       return `${year}-${month}-${day} ${hours}:${minutes}`;
     });
 
+    const currentTheme = ref('light');
+
+    const setTheme = (theme: string) => {
+      document.documentElement.setAttribute('data-theme', theme);
+      currentTheme.value = theme;
+    };
+
+    const toggleTheme = () => {
+      const newTheme = currentTheme.value === 'light' ? 'dark' : 'light';
+      setTheme(newTheme);
+    };
+
     onMounted(() => {
       initializeGame();
       timer = window.setInterval(updateTime, 200) as unknown as number;
       isRunning.value = true;
+
+      const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+      setTheme(prefersDarkScheme.matches ? 'dark' : 'light');
+
+      prefersDarkScheme.addEventListener('change', (e) => {
+        setTheme(e.matches ? 'dark' : 'light');
+      });
     });
 
     onUnmounted(() => {
@@ -108,7 +128,7 @@ export default defineComponent({
       locale.value = lang;
     };
 
-    return { player, team, formattedTime, toggleTimer, isRunning, changeLanguage, t };
+    return { player, team, formattedTime, toggleTimer, isRunning, changeLanguage, t, toggleTheme, currentTheme };
   }
 });
 </script>
