@@ -18,7 +18,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="member in team" :key="member.name" @click="selectMember(member)" :class="{ player: isPlayer(member) }">
+            <tr v-for="member in team" :key="member.id" @click="selectMember(member)" :class="{ player: isPlayer(member) }">
               <td>{{ member.name }} <span v-if="isPlayer(member)">★</span></td>
               <td>{{ member.gender }}</td>
               <td>{{ member.age }}</td>
@@ -91,7 +91,7 @@ export default defineComponent({
     };
 
     const isPlayer = (member: Character) => {
-      return member.name === props.player.name;
+      return member.id === props.player.id;
     };
 
     const showTooltip = (event: MouseEvent, item: Item) => {

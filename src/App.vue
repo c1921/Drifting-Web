@@ -23,6 +23,7 @@ import Tabs from './components/Tabs.vue';
 import { Character } from './types/character';
 import { Item } from './types/item';
 import { itemFactory } from './factory/itemFactory';
+import { v4 as uuidv4 } from 'uuid';
 
 export default defineComponent({
   name: 'App',
@@ -47,6 +48,7 @@ export default defineComponent({
 
     const generateCharacter = (): Character => {
       return {
+        id: uuidv4(),  // 生成唯一标识符
         name: getRandomElement(names),
         gender: getRandomElement(genders),
         age: getRandomValue(18, 60),
@@ -80,7 +82,7 @@ export default defineComponent({
     };
 
     const isPlayer = (character: Character) => {
-      return character.name === player.value?.name;
+      return character.id === player.value?.id;
     };
 
     const teamSpeed = computed(() => {
