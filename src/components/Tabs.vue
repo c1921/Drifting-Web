@@ -112,7 +112,8 @@ export default defineComponent({
   padding: 0.5rem 1rem;
   border: none;
   cursor: pointer;
-  background-color: #f0f0f0;
+  background-color: #4a4a4a; /* 深灰色背景 */
+  color: white; /* 白色文字 */
 }
 
 .tab-buttons button.active {
@@ -137,7 +138,8 @@ th, td {
 }
 
 th {
-  background-color: #f4f4f4;
+  background-color: #333; /* 深灰色背景 */
+  color: white; /* 白色文字 */
 }
 
 tr {

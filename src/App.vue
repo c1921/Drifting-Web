@@ -190,6 +190,26 @@ export default defineComponent({
   margin-left: 1rem;
 }
 
+button {
+  background-color: #4a4a4a; /* 深灰色背景 */
+  color: white; /* 白色文字 */
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #616161; /* 浅灰色背景 */
+}
+
+button:active {
+  background-color: #757575; /* 更浅的灰色背景 */
+}
+
+button:focus {
+  outline: none;
+}
+
 * {
   user-select: none; /* 禁止选择文本 */
 }
