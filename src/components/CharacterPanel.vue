@@ -12,19 +12,19 @@
     <p>{{ $t('ridingSpeed') }}: {{ character.ridingSpeed }} {{ $t('distanceUnit') }}/min</p>
     <p>{{ $t('isRiding') }}: {{ character.isRiding ? $t('yes') : $t('no') }}</p>
     <div>
-      <p>{{ $t('satiety') }}: {{ character.satiety }}</p>
+      <p>{{ $t('satiety') }}: {{ character.satiety.toFixed(2) }}</p>
       <progress :value="character.satiety" max="100"></progress>
     </div>
     <div>
-      <p>{{ $t('hydration') }}: {{ character.hydration }}</p>
+      <p>{{ $t('hydration') }}: {{ character.hydration.toFixed(2) }}</p>
       <progress :value="character.hydration" max="100"></progress>
     </div>
     <div>
-      <p>{{ $t('stamina') }}: {{ character.stamina }}</p>
+      <p>{{ $t('stamina') }}: {{ character.stamina.toFixed(2) }}</p>
       <progress :value="character.stamina" max="100"></progress>
     </div>
     <div>
-      <p>{{ $t('mood') }}: {{ character.mood }}</p>
+      <p>{{ $t('mood') }}: {{ character.mood.toFixed(2) }}</p>
       <progress :value="character.mood" max="100"></progress>
     </div>
   </div>
