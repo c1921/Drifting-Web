@@ -5,7 +5,8 @@
       <Tabs :team="team" :teamSpeed="teamSpeed" :player="player!" :items="items" @memberSelected="selectCharacter" />
     </div>
     <p>{{ $t('currentTime') }}: {{ formattedTime }}</p>
-    <p>{{ $t('travelDistance') }}: {{ travelDistance }} {{ $t('distanceUnit') }}</p>
+    <p>{{ $t('travelDistance') }}: {{ travelDistance.toFixed(2) }} {{ $t('distanceUnit') }}</p>
+    <button @click="toggleTravelState">{{ isTraveling ? $t('rest') : $t('travel') }}</button>
     <button @click="toggleTimer">{{ isRunning ? $t('pause') : $t('resume') }}</button>
     <div>
       <button @click="changeLanguage('en')">English</button>
@@ -39,6 +40,7 @@ export default defineComponent({
     const selectedCharacter = ref<Character | null>(null);
     const travelDistance = ref(0);
     const items = ref<Item[]>([]);
+    const isTraveling = ref(true);
 
     const names = ['Alice', 'Bob', 'Charlie', 'Diana', 'Edward'];
     const genders = [t('male'), t('female')];
@@ -58,7 +60,11 @@ export default defineComponent({
         intelligence: getRandomValue(1, 10),
         walkingSpeed: 70,
         ridingSpeed: getRandomValue(100, 150),
-        isRiding: false
+        isRiding: false,
+        satiety: 100,   // 饱食初始值
+        hydration: 100, // 饮水初始值
+        stamina: 100,   // 体力初始值
+        mood: 100       // 心情初始值
       };
     };
 
@@ -95,7 +101,20 @@ export default defineComponent({
 
     const updateTime = () => {
       currentTime.value = new Date(currentTime.value.getTime() + 60000); // 每分钟增加60,000毫秒
-      travelDistance.value += teamSpeed.value;
+      if (isTraveling.value) {
+        travelDistance.value += teamSpeed.value;
+        team.value.forEach(character => {
+          character.satiety = parseFloat((Math.max(character.satiety - 0.1, 0)).toFixed(2));
+          character.hydration = parseFloat((Math.max(character.hydration - 0.2, 0)).toFixed(2));
+          character.stamina = parseFloat((Math.max(character.stamina - 0.3, 0)).toFixed(2));
+          character.mood = parseFloat((Math.max(character.mood - 0.05, 0)).toFixed(2));
+        });
+      } else {
+        team.value.forEach(character => {
+          character.stamina = parseFloat((Math.min(character.stamina + 1.5, 100)).toFixed(2));
+          character.mood = parseFloat((Math.min(character.mood + 0.1, 100)).toFixed(2));
+        });
+      }
     };
 
     const toggleTimer = () => {
@@ -105,6 +124,10 @@ export default defineComponent({
         timer = window.setInterval(updateTime, 200) as unknown as number;
       }
       isRunning.value = !isRunning.value;
+    };
+
+    const toggleTravelState = () => {
+      isTraveling.value = !isTraveling.value;
     };
 
     const formattedTime = computed(() => {
@@ -149,7 +172,7 @@ export default defineComponent({
       locale.value = lang;
     };
 
-    return { player, team, selectedCharacter, formattedTime, toggleTimer, isRunning, changeLanguage, t, toggleTheme, currentTheme, selectCharacter, isPlayer, travelDistance, teamSpeed, items };
+    return { player, team, selectedCharacter, formattedTime, toggleTimer, isRunning, changeLanguage, t, toggleTheme, currentTheme, selectCharacter, isPlayer, travelDistance, teamSpeed, items, isTraveling, toggleTravelState };
   }
 });
 </script>

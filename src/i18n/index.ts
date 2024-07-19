@@ -15,7 +15,7 @@ const messages = {
     pause: 'Pause',
     resume: 'Resume',
     travel: 'Travel',
-    team: 'Team',
+    rest: 'Rest',
     travelContent: 'Travel content goes here...',
     teamContent: 'Team content goes here...',
     switchToDarkMode: 'Switch to Dark Mode',
@@ -34,9 +34,14 @@ const messages = {
     quantity: 'Quantity',
     totalWeight: 'Total Weight',
     totalValue: 'Total Value',
-    expirationDate: 'Expiration Date',
+    nutrition: 'Nutrition',
+    hydration: 'Hydration',
+    taste: 'Taste',
     attackPower: 'Attack Power',
-    defense: 'Defense'
+    defense: 'Defense',
+    satiety: 'Satiety',
+    stamina: 'Stamina',
+    mood: 'Mood'
   },
   zh: {
     generateCharacter: '生成角色',
@@ -52,7 +57,7 @@ const messages = {
     pause: '暂停',
     resume: '继续',
     travel: '旅行',
-    team: '团队',
+    rest: '休息',
     travelContent: '旅行内容在此...',
     teamContent: '团队内容在此...',
     switchToDarkMode: '切换到暗色模式',
@@ -71,15 +76,21 @@ const messages = {
     quantity: '数量',
     totalWeight: '总重量',
     totalValue: '总价值',
-    expirationDate: '有效期',
+    nutrition: '营养',
+    hydration: '水分',
+    taste: '美味',
     attackPower: '攻击力',
-    defense: '防御'
+    defense: '防御力',
+    satiety: '饱食',
+    stamina: '体力',
+    mood: '心情'
   }
 };
 
 const i18n = createI18n({
   locale: 'en',
-  messages
+  fallbackLocale: 'en',
+  messages,
 });
 
 export default i18n;
