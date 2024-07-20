@@ -40,3 +40,12 @@ export const itemFactory = (name: string, quantity: number): Item => {
       throw new Error('Unknown item type');
   }
 };
+
+export const findOrCreateItem = (items: Item[], name: string, quantity: number): void => {
+  const existingItem = items.find(item => item.name === name);
+  if (existingItem) {
+    existingItem.quantity += quantity;
+  } else {
+    items.push(itemFactory(name, quantity));
+  }
+};

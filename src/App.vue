@@ -13,11 +13,17 @@
       <button @click="changeLanguage('zh')">中文</button>
     </div>
     <button @click="toggleTheme">{{ currentTheme === 'light' ? $t('switchToDarkMode') : $t('switchToLightMode') }}</button>
+    <div class="log" ref="logContainer">
+      <h3>Log</h3>
+      <ul>
+        <li v-for="(entry, index) in log" :key="index">{{ entry }}</li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onMounted, onUnmounted } from 'vue';
+import { defineComponent, ref, computed, onMounted, onUnmounted, nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
 import CharacterPanel from './components/CharacterPanel.vue';
 import Tabs from './components/Tabs.vue';
@@ -25,6 +31,7 @@ import { Character } from './types/character';
 import { Item } from './types/item';
 import { itemFactory } from './factory/itemFactory';
 import { v4 as uuidv4 } from 'uuid';
+import { Event, events } from './types/event';
 
 export default defineComponent({
   name: 'App',
@@ -41,6 +48,8 @@ export default defineComponent({
     const travelDistance = ref(0);
     const items = ref<Item[]>([]);
     const isTraveling = ref(true);
+    const log = ref<string[]>([]);
+    const logContainer = ref<HTMLElement | null>(null);
 
     const names = ['Alice', 'Bob', 'Charlie', 'Diana', 'Edward'];
     const genders = [t('male'), t('female')];
@@ -109,12 +118,27 @@ export default defineComponent({
           character.stamina = parseFloat((Math.max(character.stamina - 0.3, 0)).toFixed(2));
           character.mood = parseFloat((Math.max(character.mood - 0.05, 0)).toFixed(2));
         });
+        triggerEvents();
       } else {
         team.value.forEach(character => {
           character.stamina = parseFloat((Math.min(character.stamina + 1.5, 100)).toFixed(2));
           character.mood = parseFloat((Math.min(character.mood + 0.1, 100)).toFixed(2));
         });
       }
+    };
+
+    const triggerEvents = () => {
+      const random = Math.random();
+      if (random < 0.3) {
+        events[0].effect(items.value, log.value);
+      } else if (random < 0.35) {
+        events[1].effect(items.value, log.value);
+      }
+      nextTick(() => {
+        if (logContainer.value) {
+          logContainer.value.scrollTop = logContainer.value.scrollHeight;
+        }
+      });
     };
 
     const toggleTimer = () => {
@@ -172,7 +196,7 @@ export default defineComponent({
       locale.value = lang;
     };
 
-    return { player, team, selectedCharacter, formattedTime, toggleTimer, isRunning, changeLanguage, t, toggleTheme, currentTheme, selectCharacter, isPlayer, travelDistance, teamSpeed, items, isTraveling, toggleTravelState };
+    return { player, team, selectedCharacter, formattedTime, toggleTimer, isRunning, changeLanguage, t, toggleTheme, currentTheme, selectCharacter, isPlayer, travelDistance, teamSpeed, items, isTraveling, toggleTravelState, log, logContainer };
   }
 });
 </script>
@@ -209,6 +233,23 @@ button:active {
 
 button:focus {
   outline: none;
+}
+
+.log {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  height: 150px;
+  overflow-y: auto;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 0.5rem;
 }
 
 * {
