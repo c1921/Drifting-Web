@@ -1,6 +1,5 @@
 <template>
   <div class="log" ref="logContainer">
-    <h3>Log</h3>
     <ul>
       <li v-for="(entry, index) in log" :key="index">{{ entry }}</li>
     </ul>
@@ -45,7 +44,7 @@ export default defineComponent({
   padding: 1rem;
   border-radius: 8px;
   margin-top: 1rem;
-  height: 150px;
+  height: 10rem;
   overflow-y: auto;
   background-color: $sub-bg-color;
   position: relative;
@@ -54,10 +53,11 @@ export default defineComponent({
 ul {
   list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 
 li {
-  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 /* Customize the scrollbar */
