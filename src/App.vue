@@ -77,9 +77,9 @@ export default defineComponent({
       selectedCharacter.value = player.value;
 
       items.value = [
-        itemFactory('food', getRandomValue(1, 10)),
-        itemFactory('weapon', getRandomValue(1, 5)),
-        itemFactory('shield', getRandomValue(1, 5))
+        itemFactory('Apple', getRandomValue(1, 10)),
+        itemFactory('Sword', getRandomValue(1, 5)),
+        itemFactory('Wooden Shield', getRandomValue(1, 5))
       ];
     };
 

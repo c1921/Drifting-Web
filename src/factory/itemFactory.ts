@@ -1,4 +1,4 @@
-import { Item, Food, Weapon, Shield, ItemType } from '../types/item';
+import { Item, Food, Weapon, Shield } from '../types/item';
 
 // 示例物品数据
 const foodItems = [
@@ -19,23 +19,24 @@ const shieldItems = [
   { name: 'Steel Shield', weight: 20, value: 60, defense: 30 }
 ];
 
-export const itemFactory = (type: ItemType, quantity: number): Item => {
-  let item: Item;
-  switch (type) {
+const allItems = [
+  ...foodItems.map(item => ({ ...item, type: 'food' })),
+  ...weaponItems.map(item => ({ ...item, type: 'weapon' })),
+  ...shieldItems.map(item => ({ ...item, type: 'shield' }))
+];
+
+export const itemFactory = (name: string, quantity: number): Item => {
+  const item = allItems.find(item => item.name === name);
+  if (!item) throw new Error('Item not found');
+
+  switch (item.type) {
     case 'food':
-      const foodItem = foodItems[Math.floor(Math.random() * foodItems.length)];
-      item = { ...foodItem, quantity } as Food;
-      break;
+      return { ...item, quantity } as Food;
     case 'weapon':
-      const weaponItem = weaponItems[Math.floor(Math.random() * weaponItems.length)];
-      item = { ...weaponItem, quantity } as Weapon;
-      break;
+      return { ...item, quantity } as Weapon;
     case 'shield':
-      const shieldItem = shieldItems[Math.floor(Math.random() * shieldItems.length)];
-      item = { ...shieldItem, quantity } as Shield;
-      break;
+      return { ...item, quantity } as Shield;
     default:
       throw new Error('Unknown item type');
   }
-  return item;
 };
