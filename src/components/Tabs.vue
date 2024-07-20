@@ -6,7 +6,7 @@
       <button @click="selectTab('items')" :class="{ active: selectedTab === 'items' }">{{ $t('items') }}</button>
     </div>
     <div class="tab-content">
-      <TravelTab v-if="selectedTab === 'travel'" />
+      <TravelTab v-if="selectedTab === 'travel'" :travelDistance="travelDistance" :isTraveling="isTraveling" @toggleTravelState="toggleTravelState" />
       <TeamTab v-if="selectedTab === 'team'" :team="team" :teamSpeed="teamSpeed" :player="player" @memberSelected="selectMember" />
       <ItemsTab v-if="selectedTab === 'items'" :items="items" />
     </div>
@@ -44,9 +44,17 @@ export default defineComponent({
     items: {
       type: Array as PropType<Item[]>,
       required: true
+    },
+    travelDistance: {
+      type: Number,
+      required: true
+    },
+    isTraveling: {
+      type: Boolean,
+      required: true
     }
   },
-  emits: ['memberSelected'],
+  emits: ['memberSelected', 'toggleTravelState'],
   setup(props, { emit }) {
     const selectedTab = ref('travel');
 
@@ -58,7 +66,11 @@ export default defineComponent({
       emit('memberSelected', member);
     };
 
-    return { selectedTab, selectTab, selectMember };
+    const toggleTravelState = () => {
+      emit('toggleTravelState');
+    };
+
+    return { selectedTab, selectTab, selectMember, toggleTravelState };
   }
 });
 </script>
@@ -79,8 +91,8 @@ export default defineComponent({
   padding: 0.5rem 1rem;
   border: none;
   cursor: pointer;
-  background-color: #4a4a4a; /* 深灰色背景 */
-  color: white; /* 白色文字 */
+  background-color: #4a4a4a;
+  color: white;
 }
 
 .tab-buttons button.active {

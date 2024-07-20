@@ -1,19 +1,21 @@
 <template>
   <div id="app">
+    <Header :currentTime="currentTime" :isRunning="isRunning" @toggleTimer="toggleTimer" />
     <div class="layout">
       <CharacterPanel v-if="selectedCharacter" :character="selectedCharacter" :isPlayer="isPlayer(selectedCharacter)" />
-      <Tabs :team="team" :teamSpeed="teamSpeed" :player="player!" :items="items" @memberSelected="selectCharacter" />
+      <Tabs
+        :team="team"
+        :teamSpeed="teamSpeed"
+        :player="player!"
+        :items="items"
+        :travelDistance="travelDistance"
+        :isTraveling="isTraveling"
+        @memberSelected="selectCharacter"
+        @toggleTravelState="toggleTravelState"
+      />
     </div>
-    <p>{{ $t('currentTime') }}: {{ formattedTime }}</p>
-    <p>{{ $t('travelDistance') }}: {{ travelDistance.toFixed(2) }} {{ $t('distanceUnit') }}</p>
-    <button @click="toggleTravelState">{{ isTraveling ? $t('rest') : $t('travel') }}</button>
-    <button @click="toggleTimer">{{ isRunning ? $t('pause') : $t('resume') }}</button>
-    <div>
-      <button @click="changeLanguage('en')">English</button>
-      <button @click="changeLanguage('zh')">中文</button>
-    </div>
-    <button @click="toggleTheme">{{ currentTheme === 'light' ? $t('switchToDarkMode') : $t('switchToLightMode') }}</button>
     <LogPanel :log="log" />
+    <Footer :currentTheme="currentTheme" @changeLanguage="changeLanguage" @toggleTheme="toggleTheme" />
   </div>
 </template>
 
@@ -23,6 +25,8 @@ import { useI18n } from 'vue-i18n';
 import CharacterPanel from './components/CharacterPanel.vue';
 import Tabs from './components/Tabs.vue';
 import LogPanel from './components/LogPanel.vue';
+import Header from './components/Header.vue';
+import Footer from './components/Footer.vue';
 import { Character } from './types/character';
 import { Item } from './types/item';
 import { itemFactory, findOrCreateItem } from './factory/itemFactory';
@@ -34,7 +38,9 @@ export default defineComponent({
   components: {
     CharacterPanel,
     Tabs,
-    LogPanel
+    LogPanel,
+    Header,
+    Footer
   },
   setup() {
     const { t, locale } = useI18n();
@@ -43,9 +49,13 @@ export default defineComponent({
     const team = ref<Character[]>([]);
     const selectedCharacter = ref<Character | null>(null);
     const travelDistance = ref(0);
-    const items = ref<Item[]>([]);
     const isTraveling = ref(true);
+    const items = ref<Item[]>([]);
     const log = ref<string[]>([]);
+
+    const currentTime = ref(new Date());
+    const isRunning = ref(false);
+    const currentTheme = ref('light');
 
     const names = ['Alice', 'Bob', 'Charlie', 'Diana', 'Edward'];
     const genders = [t('male'), t('female')];
@@ -55,7 +65,7 @@ export default defineComponent({
 
     const generateCharacter = (): Character => {
       return {
-        id: uuidv4(),  // 生成唯一标识符
+        id: uuidv4(),
         name: getRandomElement(names),
         gender: getRandomElement(genders),
         age: getRandomValue(18, 60),
@@ -66,10 +76,10 @@ export default defineComponent({
         walkingSpeed: 70,
         ridingSpeed: getRandomValue(100, 150),
         isRiding: false,
-        satiety: 100,   // 饱食初始值
-        hydration: 100, // 饮水初始值
-        stamina: 100,   // 体力初始值
-        mood: 100       // 心情初始值
+        satiety: 100,
+        hydration: 100,
+        stamina: 100,
+        mood: 100
       };
     };
 
@@ -100,12 +110,10 @@ export default defineComponent({
       return Math.min(...team.value.map(character => character.isRiding ? character.ridingSpeed : character.walkingSpeed));
     });
 
-    const currentTime = ref(new Date());
-    const isRunning = ref(false);
     let timer: number | undefined;
 
     const updateTime = () => {
-      currentTime.value = new Date(currentTime.value.getTime() + 60000); // 每分钟增加60,000毫秒
+      currentTime.value = new Date(currentTime.value.getTime() + 60000);
       if (isTraveling.value) {
         travelDistance.value += teamSpeed.value;
         team.value.forEach(character => {
@@ -145,17 +153,6 @@ export default defineComponent({
       isTraveling.value = !isTraveling.value;
     };
 
-    const formattedTime = computed(() => {
-      const year = currentTime.value.getFullYear();
-      const month = String(currentTime.value.getMonth() + 1).padStart(2, '0');
-      const day = String(currentTime.value.getDate()).padStart(2, '0');
-      const hours = String(currentTime.value.getHours()).padStart(2, '0');
-      const minutes = String(currentTime.value.getMinutes()).padStart(2, '0');
-      return `${year}-${month}-${day} ${hours}:${minutes}`;
-    });
-
-    const currentTheme = ref('light');
-
     const setTheme = (theme: string) => {
       document.documentElement.setAttribute('data-theme', theme);
       currentTheme.value = theme;
@@ -187,7 +184,26 @@ export default defineComponent({
       locale.value = lang;
     };
 
-    return { player, team, selectedCharacter, formattedTime, toggleTimer, isRunning, changeLanguage, t, toggleTheme, currentTheme, selectCharacter, isPlayer, travelDistance, teamSpeed, items, isTraveling, toggleTravelState, log };
+    return {
+      player,
+      team,
+      selectedCharacter,
+      toggleTimer,
+      isRunning,
+      changeLanguage,
+      t,
+      toggleTheme,
+      currentTheme,
+      selectCharacter,
+      isPlayer,
+      travelDistance,
+      teamSpeed,
+      items,
+      isTraveling,
+      toggleTravelState,
+      log,
+      currentTime
+    };
   }
 });
 </script>
@@ -206,27 +222,7 @@ export default defineComponent({
   margin-left: 1rem;
 }
 
-button {
-  background-color: #4a4a4a; /* 深灰色背景 */
-  color: white; /* 白色文字 */
-  border: none;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #616161; /* 浅灰色背景 */
-}
-
-button:active {
-  background-color: #757575; /* 更浅的灰色背景 */
-}
-
-button:focus {
-  outline: none;
-}
-
 * {
-  user-select: none; /* 禁止选择文本 */
+  user-select: none;
 }
 </style>
