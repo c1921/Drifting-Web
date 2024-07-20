@@ -1,6 +1,5 @@
 <template>
   <div class="character-panel">
-    <h2>{{ $t('characterInfo') }}</h2>
     <p>{{ $t('name') }}: {{ character.name }} <span v-if="isPlayer">★</span></p>
     <p>{{ $t('gender') }}: {{ character.gender }}</p>
     <p>{{ $t('age') }}: {{ character.age }}</p>

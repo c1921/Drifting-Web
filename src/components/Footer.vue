@@ -40,7 +40,6 @@ footer {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background-color: #4a4a4a;
   color: white;
 }
 
