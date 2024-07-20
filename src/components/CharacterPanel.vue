@@ -48,8 +48,11 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '../assets//variables.scss';
+
 .character-panel {
+  background: $sub-bg-color;
   padding: 1rem;
   border-radius: 8px;
 }

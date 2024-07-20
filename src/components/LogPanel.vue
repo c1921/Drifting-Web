@@ -38,13 +38,17 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '../assets/variables.scss';
+
 .log {
   padding: 1rem;
   border-radius: 8px;
   margin-top: 1rem;
   height: 150px;
   overflow-y: auto;
+  background-color: $sub-bg-color;
+  position: relative;
 }
 
 ul {
@@ -54,5 +58,31 @@ ul {
 
 li {
   margin-bottom: 0.5rem;
+}
+
+/* Customize the scrollbar */
+.log::-webkit-scrollbar {
+  width: 12px;
+}
+
+.log::-webkit-scrollbar-track {
+  background: #f4f4f4;
+  border-radius: 8px;
+}
+
+.log::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+  border: 3px solid #f4f4f4;
+}
+
+.log::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+/* For Firefox */
+.log {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #494949;
 }
 </style>

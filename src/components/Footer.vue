@@ -1,8 +1,10 @@
 <template>
   <footer>
     <div>
-      <button @click="changeLanguage('en')">English</button>
-      <button @click="changeLanguage('zh')">中文</button>
+      <select @change="changeLanguage($event)">
+        <option value="en">English</option>
+        <option value="zh">中文</option>
+      </select>
     </div>
     <button @click="toggleTheme">{{ currentTheme === 'light' ? $t('switchToDarkMode') : $t('switchToLightMode') }}</button>
   </footer>
@@ -21,8 +23,9 @@ export default defineComponent({
   },
   emits: ['changeLanguage', 'toggleTheme'],
   setup(props, { emit }) {
-    const changeLanguage = (lang: string) => {
-      emit('changeLanguage', lang);
+    const changeLanguage = (event: Event) => {
+      const select = event.target as HTMLSelectElement;
+      emit('changeLanguage', select.value);
     };
 
     const toggleTheme = () => {
@@ -39,8 +42,21 @@ footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  margin-top: 1rem;
   color: white;
+}
+
+select {
+  background-color: #42b983;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  margin-right: 0.5rem;
+}
+
+select:hover {
+  background-color: #357a38;
 }
 
 button {
@@ -49,14 +65,13 @@ button {
   border: none;
   padding: 0.5rem 1rem;
   cursor: pointer;
-  margin-right: 0.5rem;
 }
 
 button:hover {
   background-color: #357a38;
 }
 
-button:focus {
+button:focus, select:focus {
   outline: none;
 }
 </style>

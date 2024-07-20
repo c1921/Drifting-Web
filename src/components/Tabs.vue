@@ -75,7 +75,9 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '../assets//variables.scss';
+
 .tabs {
   display: flex;
   flex-direction: column;
@@ -101,8 +103,8 @@ export default defineComponent({
 }
 
 .tab-content {
-  border: 1px solid #ccc;
   padding: 1rem;
   border-radius: 4px;
+  background: $sub-bg-color;
 }
 </style>
